@@ -18,7 +18,9 @@ class Contenedor {
 
     write() {
         try{
-            fs.writeFile(this.filename, JSON.stringify(this.data))
+            fs.writeFile(this.filename, JSON.stringify(this.data), (err, result) => {
+                if(err) throw err;
+            })
         }catch (error){
             console.log(error)
         }
@@ -41,6 +43,22 @@ class Contenedor {
             ...obj, ...{ id: id + 1 }
         })
         this.write()
+    }
+
+    editByid(id, campo, valor) {
+        try{
+            let productos = this.getAll()
+            let producto = productos.filter(producto => producto.id === id)
+            producto[campo] = valor
+            const index = productos.findIndex(producto => producto.id === id) 
+
+            productos = productos.splice(index, 1, producto)
+
+            const itemParsed = JSON.stringify(productos)
+            fs.promises.writeFile(this.filename, itemParsed)
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     getByID(id) {
