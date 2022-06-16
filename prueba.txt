@@ -1,0 +1,9 @@
+Productos para probar funcionamiento
+
+Armadura https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Armor-48.png 2300
+Araña https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Poison_Spider-48.png 400
+Posion Magica https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Potion-48.png 500
+Piedra Filosofal https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Crystal_Shard-48.png 2000
+
+El tipo de platilla elegida son los Ejs, me interesan más ya que tienen un construccion muy similar al html 
+por lo que me es más facil su implementacion en este proyecto
