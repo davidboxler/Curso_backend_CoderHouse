@@ -78,7 +78,6 @@ class Contenedor {
 
     deleteAll() {
         this.data = []
-
         this.write()
     }
 
