@@ -43,6 +43,8 @@ class Contenedor {
             ...obj, ...{ id: id + 1 }
         })
         this.write()
+
+        return obj
     }
 
     editByid(id, campo, valor) {
@@ -59,6 +61,15 @@ class Contenedor {
         } catch(error) {
             console.log(error)
         }
+    }
+    
+    editByBody(obj, id){
+        obj['id'] = id
+        const idx = this.getAll().findIndex(p => p.id === obj.id)
+        this.getAll().splice(idx, 1, obj)
+        this.write()
+
+        return obj
     }
 
     getByID(id) {
