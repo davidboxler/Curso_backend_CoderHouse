@@ -1,7 +1,8 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const Contenedor = require("./contenedor");
+
+const db = require("./server/container");
 
 const app = express();
 
@@ -15,39 +16,41 @@ const io = new Server(httpServer);
 
 app.use("/public", express.static(__dirname + "/public"));
 
-const products = [];
-
-const contenedorProducts = new Contenedor("products.json");
-const contenedorMessages = new Contenedor("messages.json");
+const contenedorMessages = new db();
+const contenedorProductos = new db();
 
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.post("/", (req, res) => {
-  console.log(req.body);
-  products.push(req.body);
-  res.json(req.body);
-});
+// app.post("/", async(req, res) => {
+//   console.log(req.body);
+//   contenedorProductos.saveProduct(req.body);
+// });
 
-app.get("/products", (req, res) => {
-  res.render("products", { products });
-});
-
-app.get("/messages", (req, res) => {
-  res.render("messages", { 
-    messages: contenedorMessages.getAll()
+app.get("/products", async (req, res) => {
+  res.render("products", {
+    products: await contenedorProductos.getAllProducts(),
   });
+  console.log(contenedorProductos.getAllProducts());
+});
+
+app.get("/messages", async (req, res) => {
+  res.render("messages", {
+    messages: await contenedorMessages.getAllMsn(),
+  });
+  console.log(contenedorMessages.getAllMsn());
 });
 
 io.on("connection", (socket) => {
-  socket.on("add", (data) => {
+
+  socket.on("add", async(data) => {
     console.log(data);
-    products.push(data);
-    io.sockets.emit("show", products);
+    contenedorProductos.saveProduct(data)
+    io.sockets.emit("show", contenedorProductos.getAllProducts());
   });
 
-  socket.on("chat-in", (data) => {
+  socket.on("chat-in", async (data) => {
     const time = new Date().toLocaleString();
     const dataOut = {
       msn: data.msn,
@@ -55,9 +58,9 @@ io.on("connection", (socket) => {
       date: time,
     };
     console.log(dataOut);
-    contenedorMessages.save(dataOut)
+    contenedorMessages.saveMsn(dataOut);
 
-    io.sockets.emit("chat-out", 'ok');
+    io.sockets.emit("chat-out", "ok");
   });
 });
 
